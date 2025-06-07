@@ -2,7 +2,18 @@ import sounddevice as sd
 import scipy.io.wavfile as wav
 import numpy as np
 import whisper
+import os
+os.environ["TORCH_COMPILE_DISABLE"] = "1"
+
 import torch
+# --- optional fallback if somebody calls torch.compile explicitly ---
+def _identity_compile(fn=None, **kwargs):
+    # works for both decorator and functional forms
+    if fn is None:
+        return lambda f: f
+    return fn
+torch.compile = _identity_compile
+
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 SAMPLE_RATE = 16000

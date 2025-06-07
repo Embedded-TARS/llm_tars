@@ -3,6 +3,8 @@ import scipy.io.wavfile as wav
 import numpy as np
 import whisper
 import time
+import warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 SAMPLE_RATE = 16000
 CHANNELS = 1
@@ -25,7 +27,7 @@ def record_audio():
 
 def transcribe_audio():
     #print("Whisper model loading...")
-    model = whisper.load_model("base")
+    model = whisper.load_model("tiny.en")
     #print("Transfering to text..")
     result = model.transcribe(OUTPUT_FILE)
     #print("Output:")

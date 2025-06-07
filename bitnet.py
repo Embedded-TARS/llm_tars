@@ -1,4 +1,14 @@
+import os
+os.environ["TORCH_COMPILE_DISABLE"] = "1"
+
 import torch
+# --- optional fallback if somebody calls torch.compile explicitly ---
+def _identity_compile(fn=None, **kwargs):
+    # works for both decorator and functional forms
+    if fn is None:
+        return lambda f: f
+    return fn
+torch.compile = _identity_compile
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 model_id = "microsoft/bitnet-b1.58-2B-4T"
