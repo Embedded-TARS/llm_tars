@@ -50,11 +50,11 @@ messages = [
             "into structured JSON control instructions for a rover.\n\n"
             "There are only two types of tasks:\n"
             "1. `navigate`: Go to a specific destination with a speed setting.\n"
-            "   - Valid destinations: '집' (home), '회사' (office), '공항' (airport), '학교' (school)\n"
-            "   - Valid speeds: '빠름' (fast), '보통'(default, normal), '느림' (slow)\n\n"
+            "   - Valid destinations: 'home', 'office', 'airport', 'school'\n"
+            "   - Valid speeds: 'fast', 'normal'(defalut), 'slow')\n\n"
             "2. `manual_command`: Direct movement commands.\n"
-            "   - Valid commands: '멈추기' (stop), '앞으로 가기' (go forward), '뒤로 가기' (go backward),\n"
-            "     '왼쪽 회전' (turn left), '오른쪽 회전' (turn right), '뒤돌기' (turn around)\n\n"
+            "   - Valid commands: 'stop', 'foward', 'backward',\n"
+            "     'left_turn', 'right_turn', 'turn_around'\n\n"
             "If the user's command is unclear or doesn't match any category, reply politely asking for clarification.\n\n"
             "Always respond with:\n"
             "1. A short assistant-style reply in English.\n"
@@ -68,7 +68,7 @@ messages = [
             '     "speed": "fast" | "normal" | "slow" | null\n'
             '  }\n'
             "}\n"
-            "Only use the above values. If the user says something unclear like '거기로 가줘', then ask for clarification and set task_type to 'unknown'."
+            "Only use the above values. If the user says something unclear like 'go anywhere', then ask for clarification and set task_type to 'unknown'."
         )
     }
 ]
@@ -81,22 +81,21 @@ generation_args = {
     "do_sample": False,
 }
 
-print("🎤 [Enter] 키를 눌러 녹음을 시작/종료하세요. 'exit'를 입력하면 종료됩니다.")
+print("[Enter] 키를 눌러 녹음을 시작/종료하세요.")
 
 while True:
-    user_input = input("🔘 [Enter]로 녹음 / 'exit' 입력시 종료: ").strip().lower()
+    user_input = input("[Enter]로 녹음 / 'exit' 입력시 종료: ").strip().lower()
     if user_input == "exit":
-        print("👋 대화를 종료합니다.")
+        print("대화를 종료합니다.")
         break
 
     record_audio()
     stt_text = transcribe_audio()
-    print(f"👤 You (STT): {stt_text}")
+    print(f"You: {stt_text}")
 
     messages.append({"role": "user", "content": stt_text})
     output = pipe(messages, **generation_args)
     reply = output[0]["generated_text"].strip()
-    print(f"🤖 AI: {reply}")
+    print(f"TARS: {reply}")
 
     messages.append({"role": "assistant", "content": reply})
-
